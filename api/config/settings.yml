@@ -1,0 +1,106 @@
+# API specifications settings
+api:
+  docs:
+    auth:
+      password: ''
+      username: ''
+    root: 'swagger'
+    versions:
+      - default_host: ''
+        description: 'Psicon Service Docs'
+        endpoint: 'v1/swagger.yaml'
+        id: 'v1/swagger.yaml'
+        openapi: '3.0.3'
+        title: 'Psicon Service'
+        version: 'v1'
+  schemas:
+    error_response:
+      type: 'object'
+      properties:
+        error:
+          $ref: '#/components/schemas/exception'
+      required:
+        - 'error'
+    exception:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+        message:
+          type: 'string'
+    create_user:
+      type: 'object'
+      properties:
+        user:
+          type: 'object'
+          properties:
+            email:
+              type: 'string'
+            password:
+              type: 'string'
+            role:
+              type: 'integer'
+    user:
+      type: 'object'
+      properties:
+        email:
+          type: 'string'
+        # role:
+        #   type: 'string'
+    user_response:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+        email:
+          type: 'string'
+    change_password:
+      type: 'object'
+      properties:
+        new_password:
+          type: 'string'
+    session_response:
+      type: 'object'
+      properties:
+        session_token:
+          type: 'string'
+    credentials:
+      type: 'object'
+      properties:
+        session:
+          type: 'object'
+          properties:
+            email:
+              type: 'string'
+            password:
+              type: 'string'
+    update_user_params:
+      type: 'object'
+      properties:
+        user:
+          type: 'object'
+          properties:
+            role:
+              type: 'integer'
+
+# CORS settings
+cors:
+  # allowed_origins: <%= ENV.fetch('PSICON_WEB_URL') { 'http://localhost:3000' } %>
+
+# Database connection url
+database:
+  name: <%= ENV.fetch('DB_NAME') { nil } %>
+  user: <%= ENV.fetch('DB_USER') { 'postgres' } %>
+  pass: <%= ENV.fetch('DB_PASS') { 'postgres' } %>
+  host: <%= ENV.fetch('DB_HOST') { 'db' } %>
+
+secret_key: <%= ENV.fetch('SECRET_KEY') { '' } %>
+
+# psicon_web_url: <%= ENV.fetch('PSICON_WEB_URL') { 'http://localhost:3000' } %>
+
+# I18n Settings
+i18n:
+  available_locales:
+    - en
+    - pt-BR
+  default_locale: 'pt-BR'

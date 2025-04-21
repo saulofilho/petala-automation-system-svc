@@ -1,0 +1,49 @@
+services:
+  # app:
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./app:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "3001:3000"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  db-setup:
+    build:
+      context: ./api
+    environment:
+      RAILS_ENV: development
+    command: bundle exec bin/rails db:prepare
+    volumes:
+      - .:/api/app
+    depends_on:
+      - db
+
+  api:
+    build:
+      context: ./api
+    volumes:
+      - ./api:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - db-setup
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      SECRET_KEY: ${SECRET_KEY}
+
+volumes:
+  postgres_data:
