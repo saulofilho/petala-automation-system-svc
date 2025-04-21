@@ -9,7 +9,7 @@ module V1
       response.set_cookie(:session_token, value: command.result[:session_token], path: '/', httponly: true,
                                           expires: 24.hours.from_now)
 
-      render json: { user:UserSerializer.new.serialize(command.result[:user]) }, status: :created
+      render json: { user: UserSerializer.new.serialize(command.result[:user]) }, status: :created
     end
 
     def change_password
@@ -25,7 +25,7 @@ module V1
     private
 
     def user_params
-      params.require(:user).permit(:email, :password)
+      params.require(:user).permit(:email, :password, :name, :cpf, :phone, :role)
     end
 
     def destroy_params
@@ -34,14 +34,6 @@ module V1
 
     def change_password_params
       params.require(:new_password)
-    end
-
-    def update_params
-      params.require(:user).permit(:role)
-    end
-
-    def verify_email_params
-      params.require(:token)
     end
   end
 end

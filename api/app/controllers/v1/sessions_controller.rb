@@ -9,7 +9,7 @@ module V1
       response.set_cookie(:session_token, value: command.result[:session_token], path: '/', httponly: true,
                                           expires: 24.hours.from_now)
 
-      render json: command.result[:user], status: :created, serializer: UserSerializer
+      render json: { user: UserSerializer.new.serialize(command.result[:user]) }, status: :created
     end
 
     def destroy
