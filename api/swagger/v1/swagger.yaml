@@ -1,0 +1,124 @@
+---
+openapi: 3.0.3
+info:
+  title: Psicon Service
+  version: v1
+paths:
+  "/v1/users":
+    post:
+      summary: create a user
+      tags:
+      - Users
+      operationId: user_create
+      parameters: []
+      responses:
+        '201':
+          description: user created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    "$ref": "#/components/schemas/user"
+                required:
+                - user
+        '422':
+          description: invalid resource
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/create_user"
+servers:
+- url: "{defaultHost}"
+  variables:
+    defaultHost:
+      default: ''
+components:
+  schemas:
+    error_response:
+      type: object
+      properties:
+        error:
+          "$ref": "#/components/schemas/exception"
+      required:
+      - error
+    exception:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+    create_user:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+            role:
+              type: integer
+    user:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        cpf:
+          type: string
+        phone:
+          type: string
+        roles:
+          type: string
+    user_response:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+    change_password:
+      type: object
+      properties:
+        new_password:
+          type: string
+    session_response:
+      type: object
+      properties:
+        session_token:
+          type: string
+    credentials:
+      type: object
+      properties:
+        session:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+    update_user_params:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            role:
+              type: integer
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+    basic_auth:
+      type: http
+      scheme: basic
