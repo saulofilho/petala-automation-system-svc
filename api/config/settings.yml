@@ -70,24 +70,32 @@ api:
       properties:
         session_token:
           type: 'string'
-    credentials:
+    company:
       type: 'object'
       properties:
-        session:
-          type: 'object'
-          properties:
-            email:
-              type: 'string'
-            password:
-              type: 'string'
-    update_user_params:
+        name:
+          type: 'string'
+        cnpj:
+          type: 'string'
+        cep:
+          type: 'string'
+        street:
+          type: 'string'
+        number:
+          type: 'integer'
+        city:
+          type: 'string'
+        state:
+          type: 'string'
+        user_id:
+          type: 'integer'
+    order:
       type: 'object'
       properties:
-        user:
-          type: 'object'
-          properties:
-            role:
-              type: 'integer'
+        name:
+          type: 'string'
+        company_id:
+          type: 'integer'
 
 # CORS settings
 cors:

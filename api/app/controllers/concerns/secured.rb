@@ -6,7 +6,7 @@ module Secured
   private
 
   def authenticate_request!
-    @current_user ||= User.eager_load(:account, :psychologist).find(auth_session_user_id) if auth_token
+    @current_user ||= User.eager_load(:companies).find(auth_session_user_id) if auth_token
   end
 
   def http_token

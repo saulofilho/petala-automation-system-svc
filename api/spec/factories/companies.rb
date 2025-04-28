@@ -7,5 +7,6 @@ FactoryBot.define do
     number { Faker::Address.building_number.to_i }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
+    user
   end
 end

@@ -3,7 +3,6 @@
 module V1
   class CompaniesController < ApplicationController
     before_action :authenticate_request!
-    before_action :set_user, only: %i[index create]
     before_action :set_company, only: %i[show update destroy]
 
     def index
@@ -16,12 +15,8 @@ module V1
     end
 
     def create
-      company = Company.new(company_params)
-      if company.save
-        render json: { company: CompanySerializer.new(company) }, status: :created
-      else
-        render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
-      end
+      company = Company.create!(company_params)
+      render json: { company: CompanySerializer.new.serialize(company) }, status: :created
     end
 
     def update
@@ -39,17 +34,12 @@ module V1
 
     private
 
-    def set_user
-      head :forbidden unless params[:user_id].to_i == current_user.id
-      @user = current_user
-    end
-
     def set_company
       @company = current_user.companies.find(params[:id])
     end
 
     def company_params
-      params.require(:company).permit(:name, :cnpj, :address)
+      params.require(:company).permit(:name, :cnpj, :cep, :street, :number, :city, :state, :user_id)
     end
   end
 end
