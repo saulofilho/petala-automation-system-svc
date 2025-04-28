@@ -7,10 +7,19 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => '/api-docs'
 
   namespace :v1 do
-    resources :users, only: %i[create update destroy] do
-      get :me, on: :collection
-    end
-
     resource :sessions, only: %i[create destroy]
+
+    resources :users, only: %i[create update destroy] do
+      collection do
+        get :me
+        put :change_password
+      end
+
+      resources :companies, shallow: true do
+        resources :orders, shallow: true do
+          resources :products, shallow: true
+        end
+      end
+    end
   end
 end

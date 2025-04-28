@@ -14,16 +14,18 @@ RSpec.describe 'V1::User', swagger_doc: 'v1/swagger.yaml' do
       context 'when create a user' do
         response 201, 'user created' do
           schema schema_with_object(:user, '#/components/schemas/user')
-
           let(:user) do
             {
               user: {
-                email: Faker::Internet.email,
-                password: 'Teste@123'
+                email: 'foobar@gmail.com',
+                password: '@Teste123@',
+                name: 'Foo Bar',
+                cpf: '12345678900',
+                phone: '1199990000',
+                role: 'admin'
               }
             }
           end
-
           run_test! do
             expect(cookies[:session_token]).to be_present
           end
@@ -36,74 +38,65 @@ RSpec.describe 'V1::User', swagger_doc: 'v1/swagger.yaml' do
             let(:user) do
               {
                 user: {
-                  email: Faker::Internet.email,
-                  password: '12345678'
+                  email: 'foobar@gmail.com',
+                  password: '12345678',
+                  name: 'Foo Bar',
+                  cpf: '12345678900',
+                  phone: '1199990000',
+                  role: 'promoter'
                 }
               }
             end
 
-            let(:response_body) do
-              {
-                error:
-                  {
-                    id: 'active_record/record_invalid',
-                    message: 'Password precisa ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial'
-                  }
-              }
-            end
-
             run_test! do
-              expect(json_response).to eql response_body
+              expect(json_response.error.message).to eql "Validation failed: Password precisa ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial"
             end
           end
 
           context 'when email already exists' do
             before do
-              create(:user, email: 'teste@gmail.com')
+              create(:user, email: 'foobar@gmail.com')
             end
 
             let(:user) do
               {
                 user: {
-                  email: 'teste@gmail.com',
-                  password: '@Teste123@'
+                  email: 'foobar@gmail.com',
+                  password: '@Teste123@',
+                  name: 'Foo Bar',
+                  cpf: '12345678900',
+                  phone: '1199990000',
+                  role: 'admin'
                 }
               }
             end
 
-            let(:response_body) do
-              {
-                error:
-                  {
-                    id: 'active_record/record_invalid',
-                    message: 'E-mail já está em uso'
-                  }
-              }
-            end
-
             run_test! do
-              expect(json_response).to eql response_body
+              expect(json_response.error.message).to eql 'Validation failed: Email has already been taken'
             end
           end
         end
 
-        context 'when create a psychologist user' do
+        context 'when create an admin user' do
           response 201, 'user created' do
             schema schema_with_object(:user, '#/components/schemas/user')
 
             let(:user) do
               {
                 user: {
-                  email: 'teste@gmail.com',
+                  email: 'foobar@gmail.com',
                   password: 'Teste@123',
-                  role: 'psychologist'
+                  name: 'Foo Bar',
+                  cpf: '12345678900',
+                  phone: '1199990000',
+                  role: 'manager'
                 }
               }
             end
 
             run_test! do
               expect(cookies[:session_token]).to be_present
-              expect(User.find_by(email: 'teste@gmail.com').role).to eq('psychologist')
+              expect(User.find_by(email: 'foobar@gmail.com').role).to eq('manager')
             end
           end
         end

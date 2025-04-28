@@ -2,9 +2,17 @@ class User < ApplicationRecord
   has_secure_password
 
   validates :email, presence: true, uniqueness: true
-  # validates :role, presence: true, inclusion: { in: %w[patient psychologist] }
+  validates :name, :cpf, :phone, presence: true
+  validates :role, presence: true, inclusion: { in: %w[admin manager promoter] }
   validates :password, length: { minimum: 8 }
   validate :password_complexity
+
+
+  enum :role, {
+    admin: 'admin',
+    manager: 'manager',
+    promoter: 'promoter'
+  }, prefix: :role
 
   def generate_validation_token
     self.verification_token_sent_at = Time.zone.now
@@ -20,10 +28,4 @@ class User < ApplicationRecord
     errors.add(:password,
                'precisa ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial')
   end
-
-  # enum role: {
-  #   admin: 'admin',
-  #   manager: 'manager',
-  #   promoter: 'promoter'
-  # }, _prefix: :role
 end

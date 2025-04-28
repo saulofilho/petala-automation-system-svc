@@ -36,11 +36,11 @@ module Error
         mapped_status = ERROR_STATUS_CODE_MAPPING[exception.class]
         status_code = if mapped_status
                         mapped_status
-                      elsif exception.respond_to?(:status_code)
+        elsif exception.respond_to?(:status_code)
                         exception.status_code
-                      else
+        else
                         :internal_server_error
-                      end
+        end
         Error::Exception.new(id: exception.class.to_s.underscore, status_code:, message: exception.message,
                              detail: exception.full_message)
       end

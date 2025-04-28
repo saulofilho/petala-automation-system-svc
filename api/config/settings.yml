@@ -45,8 +45,14 @@ api:
       properties:
         email:
           type: 'string'
-        # role:
-        #   type: 'string'
+        name:
+          type: 'string'
+        cpf:
+          type: 'string'
+        phone:
+          type: 'string'
+        roles:
+          type: 'string'
     user_response:
       type: 'object'
       properties:

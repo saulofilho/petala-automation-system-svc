@@ -13,7 +13,7 @@ module SessionCommand
       raise InvalidCredentialsException unless user&.authenticate(@params[:password])
 
       session_token = JsonWebToken.encode(user: { id: user.id })
-      { session_token: , user: }
+      { session_token:, user: }
     end
   end
 end

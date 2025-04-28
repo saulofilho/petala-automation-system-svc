@@ -18,7 +18,7 @@ RSpec.describe JsonWebToken, type: :lib do
   let(:token) { JWT.encode payload, Settings.secret_key, 'HS256', headers }
 
   it 'decode a jwt token' do
-    allow(Net::HTTP).to receive(:get).and_return({ keys: [jwk.export] }.to_json)
+    allow(Net::HTTP).to receive(:get).and_return({ keys: [ jwk.export ] }.to_json)
     expect(described_class.decode(token)).to eq(payload)
   end
 end
