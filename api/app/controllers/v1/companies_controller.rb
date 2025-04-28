@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   class CompaniesController < ApplicationController
     before_action :authenticate_request!

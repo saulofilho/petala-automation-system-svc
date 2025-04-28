@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/controllers/v1/products_controller.rb
 module V1
   class ProductsController < ApplicationController
