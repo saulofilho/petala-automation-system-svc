@@ -37,6 +37,10 @@ class ApplicationPolicy
     false
   end
 
+  def admin?
+    @user.role_admin?
+  end
+
   class Scope
     attr_reader :user, :scope
 

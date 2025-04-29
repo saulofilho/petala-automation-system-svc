@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CompanyPolicy < ApplicationPolicy
+class OrderPolicy < ApplicationPolicy
   def index?
     owner? || admin?
   end
@@ -20,6 +20,6 @@ class CompanyPolicy < ApplicationPolicy
   private
 
   def owner?
-    @user.id == @record.user.id
+    @user.id == @record.company.user.id
   end
 end

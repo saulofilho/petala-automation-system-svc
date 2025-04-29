@@ -113,6 +113,11 @@ api:
           type: 'string'
         company_id:
           type: 'integer'
+    order_update:
+      type: 'object'
+      properties:
+        name:
+          type: 'string'
 
 # CORS settings
 cors:

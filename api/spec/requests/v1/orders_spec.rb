@@ -2,32 +2,33 @@
 
 require 'swagger_helper'
 
-RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
-  path '/v1/companies/{id}' do
-    get 'show a company' do
-      tags 'Companies'
+RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
+  path '/v1/orders/{id}' do
+    get 'show an order' do
+      tags 'Orders'
       consumes 'application/json'
       produces 'application/json'
-      operationId 'company_show'
+      operationId 'order_show'
       parameter name: :id, in: :path, type: :string
 
-      context 'When user is logged in' do
+      context 'when user is logged in' do
         context 'as admin' do
           let(:user) { create(:user, role: 'admin') }
           include_context 'with user authentication' do
             let(:user_id) { user.id }
           end
 
-          response 200, 'company founded' do
+          response 200, 'order founded' do
             let(:company) { create(:company, user:) }
-            let(:id) { company.id }
-            schema '$ref' => '#/components/schemas/company'
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
+            schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:company][:cnpj]).to be_present
+              expect(json_response[:order][:name]).to be_present
             end
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
@@ -40,16 +41,17 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
             let(:user_id) { user.id }
           end
 
-          response 200, 'company founded' do
+          response 200, 'order founded' do
             let(:company) { create(:company, user:) }
-            let(:id) { company.id }
-            schema '$ref' => '#/components/schemas/company'
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
+            schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:company][:cnpj]).to be_present
+              expect(json_response[:order][:name]).to be_present
             end
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
@@ -57,15 +59,16 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
 
           response 403, 'user not owner' do
             let(:other_user) { create(:user) }
-            let(:company) { create(:company, user: other_user) }
-            let(:id) { company.id }
+            let(:other_company) { create(:company, user: other_user) }
+            let(:order) { create(:order, company: other_company) }
+            let(:id) { order.id }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
           end
         end
       end
 
-      context 'When user is not logged in' do
+      context 'when user is not logged in' do
         let(:id) { 999 }
         include_context 'with missing jwt authentication'
         response 401, 'invalid session' do
@@ -75,48 +78,43 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       end
     end
 
-    put 'update a company' do
-      tags 'Companies'
+    put 'update an order' do
+      tags 'Orders'
       consumes 'application/json'
       produces 'application/json'
-      operationId 'company_update'
+      operationId 'order_update'
       parameter name: :id, in: :path, type: :string
-      parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/company_update' }
+      parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/order_update' }
 
-      context 'When user is logged in' do
+      context 'when user is logged in' do
         context 'as admin' do
           let(:user) { create(:user, role: 'admin') }
           include_context 'with user authentication' do
             let(:user_id) { user.id }
           end
 
-          response 200, 'company updated' do
+          response 200, 'order updated' do
             let(:company) { create(:company, user:) }
-            let(:id) { company.id }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             let(:payload) do
               {
-                company: {
-                  name: 'Foo Bar Company',
-                  cnpj: Faker::Company.brazilian_company_number,
-                  cep: Faker::Address.zip_code,
-                  street: Faker::Address.street_name,
-                  number: Faker::Address.building_number.to_i,
-                  city: Faker::Address.city,
-                  state: Faker::Address.state_abbr
+                order: {
+                  name: 'Foo Bar Order'
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/company'
+            schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:company][:name]).to eq 'Foo Bar Company'
+              expect(json_response[:order][:name]).to eq 'Foo Bar Order'
             end
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             let(:payload) do
               {
-                company: {
+                order: {
                   name: 'Foo Bar Company'
                 }
               }
@@ -132,33 +130,28 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
             let(:user_id) { user.id }
           end
 
-          response 200, 'company updated' do
+          response 200, 'order updated' do
             let(:company) { create(:company, user:) }
-            let(:id) { company.id }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             let(:payload) do
               {
-                company: {
-                  name: 'Foo Bar Company',
-                  cnpj: Faker::Company.brazilian_company_number,
-                  cep: Faker::Address.zip_code,
-                  street: Faker::Address.street_name,
-                  number: Faker::Address.building_number.to_i,
-                  city: Faker::Address.city,
-                  state: Faker::Address.state_abbr
+                order: {
+                  name: 'Foo Bar Order'
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/company'
+            schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:company][:name]).to eq 'Foo Bar Company'
+              expect(json_response[:order][:name]).to eq 'Foo Bar Order'
             end
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             let(:payload) do
               {
-                company: {
+                order: {
                   name: 'Foo Bar Company'
                 }
               }
@@ -170,11 +163,12 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
           response 403, 'user not owner' do
             let(:other_user) { create(:user) }
             let(:company) { create(:company, user: other_user) }
-            let(:id) { company.id }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             let(:payload) do
               {
-                company: {
-                  name: 'Foo Bar Company'
+                order: {
+                  name: 'Foo Bar Order'
                 }
               }
             end
@@ -184,12 +178,12 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
         end
       end
 
-      context 'When user is not logged in' do
+      context 'when user is not logged in' do
         let(:id) { 999 }
         let(:payload) do
           {
-            company: {
-              name: 'Foo Bar Company'
+            order: {
+              name: 'Foo Bar Order'
             }
           }
         end
@@ -201,27 +195,28 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       end
     end
 
-    delete 'destroy a company' do
-      tags 'Companies'
+    delete 'destroy an order' do
+      tags 'Orders'
       consumes 'application/json'
       produces 'application/json'
-      operationId 'company_destroy'
+      operationId 'order_destroy'
       parameter name: :id, in: :path, type: :string
 
-      context 'When user is logged in' do
+      context 'when user is logged in' do
         context 'as admin' do
           let(:user) { create(:user, role: 'admin') }
           include_context 'with user authentication' do
             let(:user_id) { user.id }
           end
 
-          response 204, 'company destroyed' do
-            let(:company) { create(:company, user:) }
-            let(:id) { company.id }
+          response 204, 'order destroyed' do
+            let(:company) { create(:company, user: ) }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             run_test!
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
@@ -234,13 +229,14 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
             let(:user_id) { user.id }
           end
 
-          response 204, 'company destroyed' do
-            let(:company) { create(:company, user:) }
-            let(:id) { company.id }
+          response 204, 'order destroyed' do
+            let(:company) { create(:company, user: ) }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             run_test!
           end
 
-          response 404, 'company not founded' do
+          response 404, 'order not founded' do
             let(:id) { 999 }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
@@ -248,15 +244,16 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
 
           response 403, 'user not owner' do
             let(:other_user) { create(:user) }
-            let(:company) { create(:company, user: other_user) }
-            let(:id) { company.id }
+            let(:company) { create(:company, user: other_user ) }
+            let(:order) { create(:order, company:) }
+            let(:id) { order.id }
             schema '$ref' => '#/components/schemas/error_response'
             run_test!
           end
         end
       end
 
-      context 'When user is not logged in' do
+      context 'when user is not logged in' do
         let(:id) { 999 }
         include_context 'with missing jwt authentication'
         response 401, 'invalid session' do
@@ -267,49 +264,44 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
     end
   end
 
-  path '/v1/users/{user_id}/companies' do
+  path '/v1/companies/{user_id}/orders' do
     # index
 
-    post 'create a company' do
-      tags 'Companies'
+    post 'create a order' do
+      tags 'Orders'
       consumes 'application/json'
       produces 'application/json'
-      operationId 'company_create'
+      operationId 'order_create'
       parameter name: :user_id, in: :path, type: :string
-      parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/company' }
+      parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/order' }
 
-      context 'When user is logged in' do
+      context 'when user is logged in' do
         let(:user) { create(:user) }
         let(:user_id) { user.id }
         include_context 'with user authentication' do
           let(:user_id) { user.id }
         end
 
-        response 201, 'company created' do
+        response 201, 'order created' do
+          let(:company) { create(:company, user:) }
           let(:payload) do
             {
-              company: {
-                name: Faker::Company.name,
-                cnpj: Faker::Company.brazilian_company_number,
-                cep: Faker::Address.zip_code,
-                street: Faker::Address.street_name,
-                number: Faker::Address.building_number.to_i,
-                city: Faker::Address.city,
-                state: Faker::Address.state_abbr,
-                user_id:
+              order: {
+                name: 'Orçamento de Pedido',
+                company_id: company.id
               }
             }
           end
-          schema '$ref' => '#/components/schemas/company'
+          schema '$ref' => '#/components/schemas/order'
           run_test! do
-            expect(json_response[:company][:cnpj]).to be_present
+            expect(json_response[:order][:name]).to be_present
           end
         end
 
         response 422, 'with invalid params' do
           let(:payload) do
             {
-              company: {}
+              order: {}
             }
           end
           schema '$ref' => '#/components/schemas/error_response'
@@ -317,20 +309,13 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
         end
       end
 
-      context 'When user is not logged in' do
+      context 'when user is not logged in' do
         let(:user) { create(:user) }
         let(:user_id) { user.id }
         let(:payload) do
           {
-            company: {
-              name: Faker::Company.name,
-              cnpj: Faker::Company.brazilian_company_number,
-              cep: Faker::Address.zip_code,
-              street: Faker::Address.street_name,
-              number: Faker::Address.building_number.to_i,
-              city: Faker::Address.city,
-              state: Faker::Address.state_abbr,
-              user_id:
+            order: {
+              name: 'Orçamento de Pedido'
             }
           }
         end

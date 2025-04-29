@@ -6,8 +6,9 @@ module V1
     before_action :set_company, only: %i[show update destroy]
 
     def index
-      companies = Company.all
-      render json: companies, each_serializer: CompanySerializer, status: :ok
+      authorize @company
+      companies = Company.includes(:user).all
+      render json: { company: CompanySerializer.new.serialize(@company) }, status: :ok
     end
 
     def show
