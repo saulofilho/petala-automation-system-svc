@@ -89,6 +89,23 @@ api:
           type: 'string'
         user_id:
           type: 'integer'
+    company_update:
+      type: 'object'
+      properties:
+        name:
+          type: 'string'
+        cnpj:
+          type: 'string'
+        cep:
+          type: 'string'
+        street:
+          type: 'string'
+        number:
+          type: 'integer'
+        city:
+          type: 'string'
+        state:
+          type: 'string'
     order:
       type: 'object'
       properties:

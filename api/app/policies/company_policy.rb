@@ -6,14 +6,14 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.id == @record.addressable.user.id
+    @user.id == @record.user.id
   end
 
   def update?
-    @user.id == @record.addressable.user.id
+    @user.id == @record.user.id
   end
 
   def destroy?
-    @user.id == @record.addressable.user.id
+    @user.id == @record.user.id
   end
 end

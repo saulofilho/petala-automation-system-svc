@@ -3,6 +3,181 @@
 require 'swagger_helper'
 
 RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
+  path '/v1/companies/{id}' do
+    get 'show a company' do
+      tags 'Companies'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'company_show'
+      parameter name: :id, in: :path, type: :string
+
+      context 'When user is logged in' do
+        let(:user) { create(:user) }
+        include_context 'with user authentication' do
+          let(:user_id) { user.id }
+        end
+
+        response 200, 'company founded' do
+          let(:company) { create(:company, user:) }
+          let(:id) { company.id }
+          schema '$ref' => '#/components/schemas/company'
+          run_test! do
+            expect(json_response[:company][:cnpj]).to be_present
+          end
+        end
+
+        response 404, 'company not founded' do
+          let(:id) { 999 }
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+
+        response 403, 'user not owner' do
+          let(:other_user) { create(:user) }
+          let(:company) { create(:company, user: other_user) }
+          let(:id) { company.id }
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+
+      context 'When user is not logged in' do
+        let(:id) { 999 }
+        include_context 'with missing jwt authentication'
+        response 401, 'invalid session' do
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+    end
+
+    put 'update a company' do
+      tags 'Companies'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'company_update'
+      parameter name: :id, in: :path, type: :string
+      parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/company_update' }
+
+      context 'When user is logged in' do
+        let(:user) { create(:user) }
+        include_context 'with user authentication' do
+          let(:user_id) { user.id }
+        end
+
+        response 200, 'company updated' do
+          let(:company) { create(:company, user:) }
+          let(:id) { company.id }
+          let(:payload) do
+            {
+              company: {
+                name: 'Foo Bar Company',
+                cnpj: Faker::Company.brazilian_company_number,
+                cep: Faker::Address.zip_code,
+                street: Faker::Address.street_name,
+                number: Faker::Address.building_number.to_i,
+                city: Faker::Address.city,
+                state: Faker::Address.state_abbr
+              }
+            }
+          end
+          schema '$ref' => '#/components/schemas/company'
+          run_test! do
+            expect(json_response[:company][:name]).to eq 'Foo Bar Company'
+          end
+        end
+
+        response 404, 'company not founded' do
+          let(:id) { 999 }
+          let(:payload) do
+            {
+              company: {
+                name: 'Foo Bar Company'
+              }
+            }
+          end
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+
+        response 403, 'user not owner' do
+          let(:other_user) { create(:user) }
+          let(:company) { create(:company, user: other_user) }
+          let(:id) { company.id }
+          let(:payload) do
+            {
+              company: {
+                name: 'Foo Bar Company'
+              }
+            }
+          end
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+
+      context 'When user is not logged in' do
+        let(:id) { 999 }
+        let(:payload) do
+          {
+            company: {
+              name: 'Foo Bar Company'
+            }
+          }
+        end
+        include_context 'with missing jwt authentication'
+        response 401, 'invalid session' do
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+    end
+
+    delete 'destroy a company' do
+      tags 'Companies'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'company_destroy'
+      parameter name: :id, in: :path, type: :string
+
+      context 'When user is logged in' do
+        let(:user) { create(:user) }
+        include_context 'with user authentication' do
+          let(:user_id) { user.id }
+        end
+
+        response 204, 'company destroyed' do
+          let(:company) { create(:company, user:) }
+          let(:id) { company.id }
+          run_test!
+        end
+
+        response 404, 'company not founded' do
+          let(:id) { 999 }
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+
+        response 403, 'user not owner' do
+          let(:other_user) { create(:user) }
+          let(:company) { create(:company, user: other_user) }
+          let(:id) { company.id }
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+
+      context 'When user is not logged in' do
+        let(:id) { 999 }
+        include_context 'with missing jwt authentication'
+        response 401, 'invalid session' do
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+    end
+  end
+
   path '/v1/users/{user_id}/companies' do
     post 'create a company' do
       tags 'Companies'

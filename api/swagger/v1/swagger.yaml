@@ -4,6 +4,152 @@ info:
   title: Psicon Service
   version: v1
 paths:
+  "/v1/companies/{id}":
+    get:
+      summary: show a company
+      tags:
+      - Companies
+      operationId: company_show
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: company founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/company"
+        '404':
+          description: company not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+    put:
+      summary: update a company
+      tags:
+      - Companies
+      operationId: company_update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: company updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/company"
+        '404':
+          description: company not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/company_update"
+    delete:
+      summary: destroy a company
+      tags:
+      - Companies
+      operationId: company_destroy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: company destroyed
+        '404':
+          description: company not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+  "/v1/users/{user_id}/companies":
+    post:
+      summary: create a company
+      tags:
+      - Companies
+      operationId: company_create
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: company created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/company"
+        '422':
+          description: with invalid params
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/company"
   "/v1/users":
     post:
       summary: create a user
@@ -97,24 +243,49 @@ components:
       properties:
         session_token:
           type: string
-    credentials:
+    company:
       type: object
       properties:
-        session:
-          type: object
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-    update_user_params:
+        name:
+          type: string
+        cnpj:
+          type: string
+        cep:
+          type: string
+        street:
+          type: string
+        number:
+          type: integer
+        city:
+          type: string
+        state:
+          type: string
+        user_id:
+          type: integer
+    company_update:
       type: object
       properties:
-        user:
-          type: object
-          properties:
-            role:
-              type: integer
+        name:
+          type: string
+        cnpj:
+          type: string
+        cep:
+          type: string
+        street:
+          type: string
+        number:
+          type: integer
+        city:
+          type: string
+        state:
+          type: string
+    order:
+      type: object
+      properties:
+        name:
+          type: string
+        company_id:
+          type: integer
   securitySchemes:
     bearer_auth:
       type: http

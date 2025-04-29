@@ -11,23 +11,23 @@ module V1
     end
 
     def show
-      render json: @company, serializer: CompanySerializer, status: :ok
+      authorize @company
+      render json: { company: CompanySerializer.new.serialize(@company) }, status: :ok
     end
 
     def create
-      company = Company.create!(company_params)
+      company = Company.create!(company_create_params)
       render json: { company: CompanySerializer.new.serialize(company) }, status: :created
     end
 
     def update
-      if @company.update(company_params)
-        render json: { company: CompanySerializer.new(@company) }, status: :ok
-      else
-        render json: { errors: @company.errors.full_messages }, status: :unprocessable_entity
-      end
+      authorize @company
+      @company.update!(company_update_params)
+      render json: { company: CompanySerializer.new.serialize(@company) }, status: :ok
     end
 
     def destroy
+      authorize @company
       @company.destroy
       head :no_content
     end
@@ -35,11 +35,15 @@ module V1
     private
 
     def set_company
-      @company = current_user.companies.find(params[:id])
+      @company = Company.find(params[:id])
     end
 
-    def company_params
+    def company_create_params
       params.require(:company).permit(:name, :cnpj, :cep, :street, :number, :city, :state, :user_id)
+    end
+
+    def company_update_params
+      params.require(:company).permit(:name, :cnpj, :cep, :street, :number, :city, :state)
     end
   end
 end
