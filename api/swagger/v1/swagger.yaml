@@ -150,6 +150,152 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/company"
+  "/v1/orders/{id}":
+    get:
+      summary: show an order
+      tags:
+      - Orders
+      operationId: order_show
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order"
+        '404':
+          description: order not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+    put:
+      summary: update an order
+      tags:
+      - Orders
+      operationId: order_update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order"
+        '404':
+          description: order not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/order_update"
+    delete:
+      summary: destroy an order
+      tags:
+      - Orders
+      operationId: order_destroy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: order destroyed
+        '404':
+          description: order not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+  "/v1/companies/{user_id}/orders":
+    post:
+      summary: create a order
+      tags:
+      - Orders
+      operationId: order_create
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: order created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order"
+        '422':
+          description: with invalid params
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/order"
   "/v1/users":
     post:
       summary: create a user
@@ -286,6 +432,11 @@ components:
           type: string
         company_id:
           type: integer
+    order_update:
+      type: object
+      properties:
+        name:
+          type: string
   securitySchemes:
     bearer_auth:
       type: http

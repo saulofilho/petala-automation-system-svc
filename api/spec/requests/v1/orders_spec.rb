@@ -210,7 +210,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
           end
 
           response 204, 'order destroyed' do
-            let(:company) { create(:company, user: ) }
+            let(:company) { create(:company, user:) }
             let(:order) { create(:order, company:) }
             let(:id) { order.id }
             run_test!
@@ -230,7 +230,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
           end
 
           response 204, 'order destroyed' do
-            let(:company) { create(:company, user: ) }
+            let(:company) { create(:company, user:) }
             let(:order) { create(:order, company:) }
             let(:id) { order.id }
             run_test!
@@ -244,7 +244,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
 
           response 403, 'user not owner' do
             let(:other_user) { create(:user) }
-            let(:company) { create(:company, user: other_user ) }
+            let(:company) { create(:company, user: other_user) }
             let(:order) { create(:order, company:) }
             let(:id) { order.id }
             schema '$ref' => '#/components/schemas/error_response'
