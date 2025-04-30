@@ -118,6 +118,48 @@ api:
       properties:
         name:
           type: 'string'
+    order_item:
+      type: 'object'
+      properties:
+        code:
+          type: 'string'
+        product:
+          type: 'string'
+        price:
+          type: 'number'
+          format: 'float'
+        quantity:
+          type: 'integer'
+        ean_code:
+          type: 'string'
+        admin_feedback:
+          type: 'string'
+          nullable: true
+        status:
+          type: 'string'
+          default: 'pending'
+        order_id:
+          type: 'integer'
+    order_item_update:
+      type: 'object'
+      properties:
+        code:
+          type: 'string'
+        product:
+          type: 'string'
+        price:
+          type: 'number'
+          format: 'float'
+        quantity:
+          type: 'integer'
+        ean_code:
+          type: 'string'
+        admin_feedback:
+          type: 'string'
+          nullable: true
+        status:
+          type: 'string'
+          default: 'pending'
 
 # CORS settings
 cors:

@@ -10,7 +10,6 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8 }
   validate :password_complexity
 
-
   enum :role, {
     admin: 'admin',
     manager: 'manager',

@@ -9,6 +9,10 @@ RSpec.describe Order, type: :model do
     it { should validate_presence_of(:name) }
   end
 
+  describe 'associations' do
+    it { should have_many(:order_items) }
+  end
+
   describe 'factory' do
     it 'has a valid factory' do
       order = build(:order)

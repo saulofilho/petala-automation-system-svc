@@ -150,6 +150,152 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/company"
+  "/v1/order_items/{id}":
+    get:
+      summary: show an order item
+      tags:
+      - OrderItems
+      operationId: order_item_show
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order item founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order_item"
+        '404':
+          description: order_item not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+    put:
+      summary: update an order item
+      tags:
+      - OrderItems
+      operationId: order_item_update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order item updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order_item"
+        '404':
+          description: order item not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/order_item_update"
+    delete:
+      summary: destroy an order item
+      tags:
+      - OrderItems
+      operationId: order_item_destroy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: order item destroyed
+        '404':
+          description: order item not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+  "/v1/orders/{order_id}/order_items":
+    post:
+      summary: create a order item
+      tags:
+      - OrderItems
+      operationId: order_item_create
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: order item created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/order_item"
+        '422':
+          description: with invalid params
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/order_item"
   "/v1/orders/{id}":
     get:
       summary: show an order
@@ -260,14 +406,14 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/error_response"
-  "/v1/companies/{user_id}/orders":
+  "/v1/companies/{company_id}/orders":
     post:
       summary: create a order
       tags:
       - Orders
       operationId: order_create
       parameters:
-      - name: user_id
+      - name: company_id
         in: path
         required: true
         schema:
@@ -437,6 +583,48 @@ components:
       properties:
         name:
           type: string
+    order_item:
+      type: object
+      properties:
+        code:
+          type: string
+        product:
+          type: string
+        price:
+          type: number
+          format: float
+        quantity:
+          type: integer
+        ean_code:
+          type: string
+        admin_feedback:
+          type: string
+          nullable: true
+        status:
+          type: string
+          default: pending
+        order_id:
+          type: integer
+    order_item_update:
+      type: object
+      properties:
+        code:
+          type: string
+        product:
+          type: string
+        price:
+          type: number
+          format: float
+        quantity:
+          type: integer
+        ean_code:
+          type: string
+        admin_feedback:
+          type: string
+          nullable: true
+        status:
+          type: string
+          default: pending
   securitySchemes:
     bearer_auth:
       type: http

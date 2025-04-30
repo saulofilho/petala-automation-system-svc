@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
       resources :companies, shallow: true do
         resources :orders, shallow: true do
-          resources :products, shallow: true
+          resources :order_items, shallow: true
         end
       end
     end
