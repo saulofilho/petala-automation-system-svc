@@ -22,7 +22,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/company"
+                type: object
+                properties:
+                  company:
+                    "$ref": "#/components/schemas/company"
+                required:
+                - company
         '404':
           description: company not founded
           content:
@@ -58,7 +63,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/company"
+                type: object
+                properties:
+                  company:
+                    "$ref": "#/components/schemas/company"
+                required:
+                - company
         '404':
           description: company not founded
           content:
@@ -161,7 +171,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/company"
+                type: object
+                properties:
+                  company:
+                    "$ref": "#/components/schemas/company"
+                required:
+                - company
         '422':
           description: with invalid params
           content:
@@ -197,7 +212,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order_item"
+                type: object
+                properties:
+                  order_item:
+                    "$ref": "#/components/schemas/order_item"
+                required:
+                - order_item
         '404':
           description: order_item not founded
           content:
@@ -233,7 +253,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order_item"
+                type: object
+                properties:
+                  order_item:
+                    "$ref": "#/components/schemas/order_item"
+                required:
+                - order_item
         '404':
           description: order item not founded
           content:
@@ -336,7 +361,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order_item"
+                type: object
+                properties:
+                  order_item:
+                    "$ref": "#/components/schemas/order_item"
+                required:
+                - order_item
         '422':
           description: with invalid params
           content:
@@ -372,7 +402,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order"
+                type: object
+                properties:
+                  order:
+                    "$ref": "#/components/schemas/order"
+                required:
+                - order
         '404':
           description: order not founded
           content:
@@ -408,7 +443,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order"
+                type: object
+                properties:
+                  order:
+                    "$ref": "#/components/schemas/order"
+                required:
+                - order
         '404':
           description: order not founded
           content:
@@ -511,7 +551,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/order"
+                type: object
+                properties:
+                  order:
+                    "$ref": "#/components/schemas/order"
+                required:
+                - order
         '422':
           description: with invalid params
           content:

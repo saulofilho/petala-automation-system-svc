@@ -23,7 +23,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
             let(:order) { create(:order, company:) }
             let(:order_item) { create(:order_item, order:) }
             let(:id) { order_item.id }
-            schema '$ref' => '#/components/schemas/order_item'
+            schema schema_with_object(:order_item, '#/components/schemas/order_item')
             run_test! do
               expect(json_response[:order_item][:code]).to be_present
             end
@@ -47,7 +47,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
             let(:order) { create(:order, company:) }
             let(:order_item) { create(:order_item, order:) }
             let(:id) { order_item.id }
-            schema '$ref' => '#/components/schemas/order_item'
+            schema schema_with_object(:order_item, '#/components/schemas/order_item')
             run_test! do
               expect(json_response[:order_item][:code]).to be_present
             end
@@ -108,7 +108,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/order_item'
+            schema schema_with_object(:order_item, '#/components/schemas/order_item')
             run_test! do
               expect(json_response[:order_item][:code]).to eq '007'
             end
@@ -146,7 +146,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/order_item'
+            schema schema_with_object(:order_item, '#/components/schemas/order_item')
             run_test! do
               expect(json_response[:order_item][:code]).to eq '007'
             end
@@ -363,7 +363,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
               }
             }
           end
-          schema '$ref' => '#/components/schemas/order_item'
+          schema schema_with_object(:order_item, '#/components/schemas/order_item')
           run_test! do
             expect(json_response[:order_item][:code]).to be_present
           end

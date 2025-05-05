@@ -22,7 +22,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:company) { create(:company, user:) }
             let(:order) { create(:order, company:) }
             let(:id) { order.id }
-            schema '$ref' => '#/components/schemas/order'
+            schema schema_with_object(:order, '#/components/schemas/order')
             run_test! do
               expect(json_response[:order][:status]).to be_present
             end
@@ -45,7 +45,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:company) { create(:company, user:) }
             let(:order) { create(:order, company:) }
             let(:id) { order.id }
-            schema '$ref' => '#/components/schemas/order'
+            schema schema_with_object(:order, '#/components/schemas/order')
             run_test! do
               expect(json_response[:order][:status]).to be_present
             end
@@ -104,7 +104,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/order'
+            schema schema_with_object(:order, '#/components/schemas/order')
             run_test! do
               expect(json_response[:order][:status]).to eq 'approved'
             end
@@ -141,7 +141,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/order'
+            schema schema_with_object(:order, '#/components/schemas/order')
             run_test! do
               expect(json_response[:order][:status]).to eq 'denied'
             end
@@ -348,7 +348,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
               }
             }
           end
-          schema '$ref' => '#/components/schemas/order'
+          schema schema_with_object(:order, '#/components/schemas/order')
           run_test! do
             expect(json_response[:order][:status]).to be_present
           end

@@ -21,7 +21,8 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
           response 200, 'company founded' do
             let(:company) { create(:company, user:) }
             let(:id) { company.id }
-            schema '$ref' => '#/components/schemas/company'
+            schema schema_with_object(:company, '#/components/schemas/company')
+
             run_test! do
               expect(json_response[:company][:cnpj]).to be_present
             end
@@ -43,7 +44,8 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
           response 200, 'company founded' do
             let(:company) { create(:company, user:) }
             let(:id) { company.id }
-            schema '$ref' => '#/components/schemas/company'
+            schema schema_with_object(:company, '#/components/schemas/company')
+
             run_test! do
               expect(json_response[:company][:cnpj]).to be_present
             end
@@ -106,7 +108,8 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/company'
+            schema schema_with_object(:company, '#/components/schemas/company')
+
             run_test! do
               expect(json_response[:company][:name]).to eq 'Foo Bar Company'
             end
@@ -148,7 +151,8 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
                 }
               }
             end
-            schema '$ref' => '#/components/schemas/company'
+            schema schema_with_object(:company, '#/components/schemas/company')
+
             run_test! do
               expect(json_response[:company][:name]).to eq 'Foo Bar Company'
             end
@@ -348,7 +352,8 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
               }
             }
           end
-          schema '$ref' => '#/components/schemas/company'
+          schema schema_with_object(:company, '#/components/schemas/company')
+
           run_test! do
             expect(json_response[:company][:cnpj]).to be_present
           end
