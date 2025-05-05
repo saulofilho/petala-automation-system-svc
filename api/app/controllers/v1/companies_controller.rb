@@ -6,9 +6,8 @@ module V1
     before_action :set_company, only: %i[show update destroy]
 
     def index
-      authorize @company
-      companies = Company.includes(:user).all
-      render json: { company: CompanySerializer.new.serialize(@company) }, status: :ok
+      @companies = policy_scope(Company)
+      render json: Panko::Response.new(companies: Panko::ArraySerializer.new(@companies, each_serializer: CompanySerializer)), status: :ok
     end
 
     def show

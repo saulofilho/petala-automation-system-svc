@@ -280,12 +280,14 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
           end
 
           response 200, 'order founded' do
-            let(:company) { create(:company, user:) }
+            let(:company) { create(:company) }
+            let(:user_company) { create(:company, user:) }
             let(:company_id) { company.id }
             let!(:order) { create_list(:order, 3, company:) }
+            let!(:user_orders) { create_list(:order, 3, company: user_company) }
             schema schema_with_objects(:orders, '#/components/schemas/order')
             run_test! do
-              expect(json_response[:orders].size).to eq 3
+              expect(json_response[:orders].size).to eq 6
             end
           end
         end
@@ -304,15 +306,6 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             run_test! do
               expect(json_response[:orders].size).to eq 3
             end
-          end
-
-          response 403, 'user not owner' do
-            let(:other_user) { create(:user) }
-            let(:company) { create(:company, user: other_user) }
-            let(:company_id) { company.id }
-            let(:order) { create(:order, company: company) }
-            schema '$ref' => '#/components/schemas/error_response'
-            run_test!
           end
         end
       end

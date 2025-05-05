@@ -7,9 +7,8 @@ module V1
     before_action :set_order_item, only: %i[show update destroy]
 
     def index
-      authorize @order_item
-      order_item = Order.includes(:company).all
-      render json: { order_item: OrderItemSerializer.new.serialize(order_item) }, status: :ok
+      @order_items = policy_scope(OrderItem)
+      render json: Panko::Response.new(order_items: Panko::ArraySerializer.new(@order_items, each_serializer: OrderItemSerializer)), status: :ok
     end
 
     def show

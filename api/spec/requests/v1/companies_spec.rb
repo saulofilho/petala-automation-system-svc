@@ -268,7 +268,55 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
   end
 
   path '/v1/users/{user_id}/companies' do
-    # index
+    get 'list companies' do
+      tags 'Companies'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'company_index'
+      parameter name: :user_id, in: :path, type: :string
+
+      context 'when user is logged in' do
+        context 'as admin' do
+          let(:user) { create(:user, role: 'admin') }
+          include_context 'with user authentication' do
+            let(:user_id) { user.id }
+          end
+
+          response 200, 'company founded' do
+            let!(:company) { create_list(:company, 3) }
+            let!(:user_companies) { create_list(:company, 3, user:) }
+            schema schema_with_objects(:companies, '#/components/schemas/company')
+            run_test! do
+              expect(json_response[:companies].size).to eq 6
+            end
+          end
+        end
+
+        context 'as manager' do
+          let(:user) { create(:user, role: 'manager') }
+          include_context 'with user authentication' do
+            let(:user_id) { user.id }
+          end
+
+          response 200, 'company founded' do
+            let!(:company) { create_list(:company, 3, user:) }
+            schema schema_with_objects(:companies, '#/components/schemas/company')
+            run_test! do
+              expect(json_response[:companies].size).to eq 3
+            end
+          end
+        end
+      end
+
+      context 'when user is not logged in' do
+        include_context 'with missing jwt authentication'
+        let(:user_id) { 1 }
+        response 401, 'invalid session' do
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+    end
 
     post 'create a company' do
       tags 'Companies'

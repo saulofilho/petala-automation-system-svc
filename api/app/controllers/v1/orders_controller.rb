@@ -6,10 +6,8 @@ module V1
     before_action :set_order, only: %i[show update destroy]
 
     def index
-      company = Company.find(params[:company_id])
-      authorize company
-      orders = company.orders
-      render json: Panko::Response.new(orders: Panko::ArraySerializer.new(orders, each_serializer: OrderSerializer)), status: :ok
+      @orders = policy_scope(Order)
+      render json: Panko::Response.new(orders: Panko::ArraySerializer.new(@orders, each_serializer: OrderSerializer)), status: :ok
     end
 
     def show

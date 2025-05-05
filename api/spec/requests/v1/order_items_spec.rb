@@ -274,7 +274,63 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
   end
 
   path '/v1/orders/{order_id}/order_items' do
-    # index
+    get 'list order items' do
+      tags 'Order Items'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'order_items_index'
+      parameter name: :order_id, in: :path, type: :string
+
+      context 'when user is logged in' do
+        context 'as admin' do
+          let(:user) { create(:user, role: 'admin') }
+          include_context 'with user authentication' do
+            let(:user_id) { user.id }
+          end
+
+          response 200, 'order founded' do
+            let(:company) { create(:company) }
+            let(:user_company) { create(:company, user:) }
+            let(:order) { create(:order, company: user_company) }
+            let(:user_order) { create(:order, company:) }
+            let(:order_id) { order.id }
+            let!(:order_item) { create_list(:order_item, 3, order:) }
+            let!(:user_order_items) { create_list(:order_item, 3, order: user_order) }
+            schema schema_with_objects(:order_items, '#/components/schemas/order_item')
+            run_test! do
+              expect(json_response[:order_items].size).to eq 6
+            end
+          end
+        end
+
+        context 'as manager' do
+          let(:user) { create(:user, role: 'manager') }
+          include_context 'with user authentication' do
+            let(:user_id) { user.id }
+          end
+
+          response 200, 'order founded' do
+            let(:company) { create(:company, user:) }
+            let(:order) { create(:order, company:) }
+            let(:order_id) { order.id }
+            let!(:order_item) { create_list(:order_item, 3, order:) }
+            schema schema_with_objects(:order_items, '#/components/schemas/order_item')
+            run_test! do
+              expect(json_response[:order_items].size).to eq 3
+            end
+          end
+        end
+      end
+
+      context 'when user is not logged in' do
+        let(:order_id) { 1 }
+        include_context 'with missing jwt authentication'
+        response 401, 'invalid session' do
+          schema '$ref' => '#/components/schemas/error_response'
+          run_test!
+        end
+      end
+    end
 
     post 'create a order item' do
       tags 'OrderItems'
