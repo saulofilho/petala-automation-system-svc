@@ -39,11 +39,11 @@ module V1
     end
 
     def order_create_params
-      params.require(:order).permit(:name, :company_id)
+      params.require(:order).permit(:status, :admin_feedback, :company_id)
     end
 
     def order_update_params
-      params.require(:order).permit(:name)
+      params.require(:order).permit(:status, :admin_feedback)
     end
   end
 end

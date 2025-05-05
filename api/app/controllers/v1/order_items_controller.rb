@@ -41,13 +41,13 @@ module V1
 
     def order_item_create_params
       params.require(:order_item).permit(
-        :code, :product, :price, :quantity, :ean_code, :status, :admin_feedback, :order_id
+        :code, :product, :price, :quantity, :ean_code, :order_id
       )
     end
 
     def order_item_update_params
       params.require(:order_item).permit(
-        :code, :product, :price, :quantity, :ean_code, :status, :admin_feedback
+        :code, :product, :price, :quantity, :ean_code
       )
     end
   end

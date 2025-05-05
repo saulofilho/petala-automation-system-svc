@@ -115,6 +115,35 @@ paths:
               schema:
                 "$ref": "#/components/schemas/error_response"
   "/v1/users/{user_id}/companies":
+    get:
+      summary: list companies
+      tags:
+      - Companies
+      operationId: company_index
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: company founded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  companies:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/company"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
     post:
       summary: create a company
       tags:
@@ -261,6 +290,35 @@ paths:
               schema:
                 "$ref": "#/components/schemas/error_response"
   "/v1/orders/{order_id}/order_items":
+    get:
+      summary: list order items
+      tags:
+      - Order Items
+      operationId: order_items_index
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order founded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_items:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/order_item"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
     post:
       summary: create a order item
       tags:
@@ -407,6 +465,35 @@ paths:
               schema:
                 "$ref": "#/components/schemas/error_response"
   "/v1/companies/{company_id}/orders":
+    get:
+      summary: list orders
+      tags:
+      - Orders
+      operationId: order_index
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: order founded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/order"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
     post:
       summary: create a order
       tags:
@@ -574,15 +661,23 @@ components:
     order:
       type: object
       properties:
-        name:
+        admin_feedback:
           type: string
+          nullable: true
+        status:
+          type: string
+          default: pending
         company_id:
           type: integer
     order_update:
       type: object
       properties:
-        name:
+        admin_feedback:
           type: string
+          nullable: true
+        status:
+          type: string
+          default: pending
     order_item:
       type: object
       properties:
@@ -597,12 +692,6 @@ components:
           type: integer
         ean_code:
           type: string
-        admin_feedback:
-          type: string
-          nullable: true
-        status:
-          type: string
-          default: pending
         order_id:
           type: integer
     order_item_update:
@@ -619,12 +708,6 @@ components:
           type: integer
         ean_code:
           type: string
-        admin_feedback:
-          type: string
-          nullable: true
-        status:
-          type: string
-          default: pending
   securitySchemes:
     bearer_auth:
       type: http

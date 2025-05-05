@@ -11,19 +11,12 @@ RSpec.describe OrderItem, type: :model do
     it { should validate_presence_of(:price) }
     it { should validate_presence_of(:quantity) }
     it { should validate_presence_of(:ean_code) }
-    it { should validate_presence_of(:status) }
   end
 
   describe 'factory' do
     it 'has a valid factory' do
       order_item = build(:order_item)
       expect(order_item).to be_valid
-    end
-  end
-
-  describe 'enums' do
-    it 'defines status enums correctly' do
-      expect(OrderItem.statuses.keys).to match_array(%w[pending approved denied])
     end
   end
 end

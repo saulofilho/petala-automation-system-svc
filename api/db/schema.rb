@@ -35,8 +35,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_180544) do
     t.float "price"
     t.integer "quantity"
     t.string "ean_code"
-    t.string "admin_feedback"
-    t.string "status", default: "pending"
     t.bigint "order_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -44,7 +42,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_30_180544) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "name"
+    t.string "admin_feedback"
+    t.string "status", default: "pending"
     t.bigint "company_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

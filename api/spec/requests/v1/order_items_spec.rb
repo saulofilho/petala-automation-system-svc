@@ -359,8 +359,6 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
                 price: Faker::Commerce.price(range: 10.0..100.0),
                 quantity: 10,
                 ean_code: Faker::Code.ean,
-                admin_feedback: nil,
-                status: 'pending',
                 order_id: order.id
               }
             }

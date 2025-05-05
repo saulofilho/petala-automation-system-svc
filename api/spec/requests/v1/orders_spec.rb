@@ -24,7 +24,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:id) { order.id }
             schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:order][:name]).to be_present
+              expect(json_response[:order][:status]).to be_present
             end
           end
 
@@ -47,7 +47,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:id) { order.id }
             schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:order][:name]).to be_present
+              expect(json_response[:order][:status]).to be_present
             end
           end
 
@@ -100,13 +100,13 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:payload) do
               {
                 order: {
-                  name: 'Foo Bar Order'
+                  status: 'approved'
                 }
               }
             end
             schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:order][:name]).to eq 'Foo Bar Order'
+              expect(json_response[:order][:status]).to eq 'approved'
             end
           end
 
@@ -137,13 +137,13 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:payload) do
               {
                 order: {
-                  name: 'Foo Bar Order'
+                  status: 'denied'
                 }
               }
             end
             schema '$ref' => '#/components/schemas/order'
             run_test! do
-              expect(json_response[:order][:name]).to eq 'Foo Bar Order'
+              expect(json_response[:order][:status]).to eq 'denied'
             end
           end
 
@@ -168,7 +168,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
             let(:payload) do
               {
                 order: {
-                  name: 'Foo Bar Order'
+                  status: 'pending'
                 }
               }
             end
@@ -183,7 +183,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
         let(:payload) do
           {
             order: {
-              name: 'Foo Bar Order'
+              name: 'pending'
             }
           }
         end
@@ -342,14 +342,15 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
           let(:payload) do
             {
               order: {
-                name: 'Orçamento de Pedido',
+                admin_feedback: nil,
+                status: 'pending',
                 company_id: company.id
               }
             }
           end
           schema '$ref' => '#/components/schemas/order'
           run_test! do
-            expect(json_response[:order][:name]).to be_present
+            expect(json_response[:order][:status]).to be_present
           end
         end
 

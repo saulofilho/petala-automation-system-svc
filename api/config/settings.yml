@@ -109,15 +109,23 @@ api:
     order:
       type: 'object'
       properties:
-        name:
+        admin_feedback:
           type: 'string'
+          nullable: true
+        status:
+          type: 'string'
+          default: 'pending'
         company_id:
           type: 'integer'
     order_update:
       type: 'object'
       properties:
-        name:
+        admin_feedback:
           type: 'string'
+          nullable: true
+        status:
+          type: 'string'
+          default: 'pending'
     order_item:
       type: 'object'
       properties:
@@ -132,12 +140,6 @@ api:
           type: 'integer'
         ean_code:
           type: 'string'
-        admin_feedback:
-          type: 'string'
-          nullable: true
-        status:
-          type: 'string'
-          default: 'pending'
         order_id:
           type: 'integer'
     order_item_update:
@@ -154,12 +156,6 @@ api:
           type: 'integer'
         ean_code:
           type: 'string'
-        admin_feedback:
-          type: 'string'
-          nullable: true
-        status:
-          type: 'string'
-          default: 'pending'
 
 # CORS settings
 cors:

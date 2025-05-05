@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :order do
-    name { Faker::Commerce.product_name }
+    admin_feedback { nil }
+    status { 'pending' }
     company
   end
 end
