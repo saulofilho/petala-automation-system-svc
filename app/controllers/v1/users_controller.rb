@@ -18,12 +18,12 @@ module V1
     end
 
     def me
-      render json: @current_user, serializer: UserSerializer, status: :ok
+      render json: { user: UserSerializer.new.serialize(@current_user) }, status: :ok
     end
 
     def update
       if @user.update(user_params)
-        render json: { user: UserSerializer.new(@user) }, status: :ok
+        render json: { user: UserSerializer.new.serialize(@user) }, status: :ok
       else
         render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
       end

@@ -6,10 +6,11 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # ports:
+    #   - "5432:5432"
 
   db-setup:
-    build:
-      context: .
+    build: .
     environment:
       RAILS_ENV: development
     command: bundle exec bin/rails db:prepare
@@ -17,10 +18,10 @@ services:
       - .:/app
     depends_on:
       - db
+    restart: "no"
 
   api:
-    build:
-      context: .
+    build: .
     volumes:
       - .:/app
     ports:
@@ -32,6 +33,10 @@ services:
       RAILS_ENV: development
       SECRET_KEY: ${SECRET_KEY}
       PETALA_AUTOMATION_SYSTEM_WEB_URL: ${PETALA_AUTOMATION_SYSTEM_WEB_URL}
-
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      
 volumes:
   postgres_data:
