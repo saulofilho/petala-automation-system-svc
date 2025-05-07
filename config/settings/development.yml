@@ -1,0 +1,4 @@
+# CORS settings
+cors:
+  allowed_origins:
+    - 'localhost:3000'

@@ -1,14 +1,4 @@
 services:
-  app:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    volumes:
-      - ./app:/app
-      - /app/node_modules
-    ports:
-      - "3001:3000"
-
   db:
     image: postgres:15
     environment:
@@ -19,31 +9,29 @@ services:
 
   db-setup:
     build:
-      context: ./api
+      context: .
     environment:
       RAILS_ENV: development
     command: bundle exec bin/rails db:prepare
     volumes:
-      - .:/api/app
+      - .:/app
     depends_on:
       - db
 
   api:
     build:
-      context: ./api
+      context: .
     volumes:
-      - ./api:/app
+      - .:/app
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - db
       - db-setup
     environment:
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
+      RAILS_ENV: development
       SECRET_KEY: ${SECRET_KEY}
+      PETALA_AUTOMATION_SYSTEM_WEB_URL: ${PETALA_AUTOMATION_SYSTEM_WEB_URL}
 
 volumes:
   postgres_data:

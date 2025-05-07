@@ -1,9 +1,0 @@
-node_modules
-.next
-out
-build
-public
-*.png
-*.jpg
-*.jpeg
-*.svg
