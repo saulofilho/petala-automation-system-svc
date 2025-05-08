@@ -49,7 +49,7 @@ RSpec.describe 'V1::User', swagger_doc: 'v1/swagger.yaml' do
             end
 
             run_test! do
-              expect(json_response.error.message).to eql "Validation failed: Password precisa ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial"
+              expect(json_response.error.message).to eql 'Validation failed: Password precisa ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial'
             end
           end
 

@@ -11,6 +11,7 @@ module Secured
 
   def http_token
     return request.cookies['session_token'] if request.cookies['session_token'].present?
+
     request.headers['Authorization'].split.last if request.headers['Authorization'].present?
   end
 

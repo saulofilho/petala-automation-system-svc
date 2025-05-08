@@ -7,7 +7,8 @@ module V1
 
     def index
       @companies = policy_scope(Company)
-      render json: Panko::Response.new(companies: Panko::ArraySerializer.new(@companies, each_serializer: CompanySerializer)), status: :ok
+      render json: Panko::Response.new(companies: Panko::ArraySerializer.new(@companies, each_serializer: CompanySerializer)),
+             status: :ok
     end
 
     def show

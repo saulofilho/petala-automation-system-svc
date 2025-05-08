@@ -8,7 +8,8 @@ module V1
 
     def index
       @order_items = policy_scope(OrderItem)
-      render json: Panko::Response.new(order_items: Panko::ArraySerializer.new(@order_items, each_serializer: OrderItemSerializer)), status: :ok
+      render json: Panko::Response.new(order_items: Panko::ArraySerializer.new(@order_items, each_serializer: OrderItemSerializer)),
+             status: :ok
     end
 
     def show
