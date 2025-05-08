@@ -22,3 +22,11 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+TODO
+
+- CACHE
+- PAGINATION
+- CHANGE PASSWORD
+- ADD NAME TO ORDER
+- pdf

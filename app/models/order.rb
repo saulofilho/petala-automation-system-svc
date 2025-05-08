@@ -5,6 +5,7 @@ class Order < ApplicationRecord
   has_many :order_items
 
   validates :status, presence: true, inclusion: { in: %w[pending approved denied] }
+  validates :description, presence: true
 
   enum :status, {
     pending: 'pending',

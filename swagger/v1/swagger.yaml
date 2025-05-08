@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.3
 info:
-  title: Psicon Service
+  title: Petala Automation System Service
   version: v1
 paths:
   "/v1/companies/{id}":
@@ -712,6 +712,8 @@ components:
         status:
           type: string
           default: pending
+        description:
+          type: string
         company_id:
           type: integer
     order_update:

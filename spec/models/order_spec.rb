@@ -6,6 +6,7 @@ RSpec.describe Order, type: :model do
   describe 'validations' do
     subject { build(:order) }
 
+    it { should validate_presence_of(:description) }
     it { should validate_presence_of(:status) }
   end
 

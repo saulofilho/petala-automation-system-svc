@@ -342,6 +342,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
           let(:payload) do
             {
               order: {
+                description: 'Pedido de Azeitonas',
                 admin_feedback: nil,
                 status: 'pending',
                 company_id: company.id
