@@ -6,3 +6,4 @@
 .env.production.local
 tmp
 log
+log/development.log
