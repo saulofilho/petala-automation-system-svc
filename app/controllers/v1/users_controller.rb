@@ -2,11 +2,22 @@
 
 module V1
   class UsersController < ApplicationController
-    before_action :authenticate_request!, only: %i[me change_password update destroy]
-    before_action :set_user, only: %i[update destroy]
+    before_action :authenticate_request!, only: %i[index show me change_password update destroy]
+    before_action :set_user, only: %i[show update destroy]
+
+    def index
+      users = User.all
+      authorize current_user
+      render json: Panko::Response.new(users: Panko::ArraySerializer.new(users, each_serializer: UserSerializer)), status: :ok
+    end
+
+    def show
+      authorize current_user
+      render json: { user: UserSerializer.new.serialize(@user) }, status: :ok
+    end
 
     def create
-      command = UserCommand::Create.call(user_params)
+      command = UserCommand::Create.call(user_create_params)
       response.set_cookie(
         :session_token,
         value: command.result[:session_token],
@@ -22,7 +33,7 @@ module V1
     end
 
     def update
-      if @user.update(user_params)
+      if @user.update(user_update_params)
         render json: { user: UserSerializer.new.serialize(@user) }, status: :ok
       else
         render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -59,11 +70,14 @@ module V1
 
     def set_user
       @user = User.find(params[:id])
-      head :forbidden unless @user == current_user
     end
 
-    def user_params
+    def user_create_params
       params.require(:user).permit(:email, :password, :name, :cpf, :phone, :role)
+    end
+
+    def user_update_params
+      params.require(:user).permit(:email, :name, :cpf, :phone, :role)
     end
 
     def password_params

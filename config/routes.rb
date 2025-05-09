@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     resource :sessions, only: %i[create destroy]
 
-    resources :users, only: %i[create update destroy] do
+    resources :users do
       collection do
         get :me
         put :change_password
