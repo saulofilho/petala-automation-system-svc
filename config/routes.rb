@@ -17,6 +17,9 @@ Rails.application.routes.draw do
 
       resources :companies, shallow: true do
         resources :orders, shallow: true do
+          member do
+            get :pdf
+          end
           resources :order_items, shallow: true
         end
       end

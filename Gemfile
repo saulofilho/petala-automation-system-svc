@@ -49,6 +49,8 @@ gem 'pundit'
 gem 'rswag-api'
 gem 'rswag-ui'
 gem 'simple_command'
+gem 'prawn'
+gem 'prawn-table'
 
 group :development, :test do
   gem 'awesome_print'

@@ -27,6 +27,10 @@ class OrderPolicy < ApplicationPolicy
     owner? || admin?
   end
 
+  def pdf?
+    owner? || admin?
+  end
+
   private
 
   def owner?

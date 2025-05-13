@@ -3,7 +3,7 @@
 module V1
   class OrdersController < ApplicationController
     before_action :authenticate_request!
-    before_action :set_order, only: %i[show update destroy]
+    before_action :set_order, only: %i[show update destroy pdf]
 
     def index
       @orders = policy_scope(Order)
@@ -31,6 +31,15 @@ module V1
       authorize @order
       @order.destroy
       head :no_content
+    end
+
+    def pdf
+      authorize @order
+      pdf = OrderPdf.new(@order)
+      send_data pdf.render,
+                filename:     "order_#{@order.id}.pdf",
+                type:         'application/pdf',
+                disposition:  'inline'
     end
 
     private
