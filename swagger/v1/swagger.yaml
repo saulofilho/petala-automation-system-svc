@@ -16,6 +16,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: company founded
@@ -57,6 +60,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: company updated
@@ -103,6 +109,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '204':
           description: company destroyed
@@ -136,6 +145,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: company founded
@@ -165,6 +177,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '201':
           description: company created
@@ -206,6 +221,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order item founded
@@ -247,6 +265,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order item updated
@@ -293,6 +314,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '204':
           description: order item destroyed
@@ -326,6 +350,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order founded
@@ -355,6 +382,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '201':
           description: order item created
@@ -384,6 +414,42 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/order_item"
+  "/v1/orders/{id}/pdf":
+    get:
+      summary: download pdf
+      tags:
+      - Orders
+      operationId: order_show
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
+      responses:
+        '200':
+          description: pdf was generated
+        '404':
+          description: order not founded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '403':
+          description: user not owner
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
   "/v1/orders/{id}":
     get:
       summary: show an order
@@ -396,6 +462,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order founded
@@ -437,6 +506,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order updated
@@ -483,6 +555,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '204':
           description: order destroyed
@@ -516,6 +591,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '200':
           description: order founded
@@ -545,6 +623,9 @@ paths:
         required: true
         schema:
           type: string
+      security:
+      - cookie_auth: []
+        bearer_auth: []
       responses:
         '201':
           description: order created
@@ -604,6 +685,33 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/create_user"
+  "/v1/users/me":
+    get:
+      summary: show current user info
+      tags:
+      - Users
+      operationId: user_me
+      security:
+      - cookie_auth: []
+        bearer_auth: []
+      responses:
+        '200':
+          description: valid session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    "$ref": "#/components/schemas/user_response"
+                required:
+                - user
+        '401':
+          description: invalid session
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error_response"
 servers:
 - url: "{defaultHost}"
   variables:

@@ -104,38 +104,36 @@ RSpec.describe 'V1::User', swagger_doc: 'v1/swagger.yaml' do
     end
   end
 
-  # path '/v1/users/me' do
-  #   get 'show current user info' do
-  #     tags 'Users'
-  #     consumes 'application/json'
-  #     produces 'application/json'
-  #     security [cookie_auth: [], bearer_auth: []]
-  #     operationId 'user_me'
+  path '/v1/users/me' do
+    get 'show current user info' do
+      tags 'Users'
+      consumes 'application/json'
+      produces 'application/json'
+      operationId 'user_me'
+      security [cookie_auth: [], bearer_auth: []]
 
-  #     response 200, 'valid session' do
-  #       schema '$ref' => '#/components/schemas/user_response'
+      response 200, 'valid session' do
+        schema schema_with_object(:user, '#/components/schemas/user_response')
+        let(:user) { create(:user, role: 'admin') }
 
-  #       let(:account) { create(:account) }
-  #       let(:user) { account.user }
+        include_context 'with user authentication' do
+          let(:user_id) { user.id }
+        end
 
-  #       include_context 'with user authentication' do
-  #         let(:user_id) { user.id }
-  #       end
+        run_test! do
+          expect(json_response.keys).to eql([:user])
+        end
+      end
 
-  #       run_test! do
-  #         expect(json_response.keys).to eql([:user])
-  #       end
-  #     end
+      response 401, 'invalid session' do
+        schema '$ref' => '#/components/schemas/error_response'
 
-  #     response 401, 'invalid session' do
-  #       schema '$ref' => '#/components/schemas/error_response'
+        include_context 'with missing jwt authentication'
 
-  #       include_context 'with missing jwt authentication'
-
-  #       run_test!
-  #     end
-  #   end
-  # end
+        run_test!
+      end
+    end
+  end
 
   # path '/v1/users/change_password' do
   #   put 'Change users password' do

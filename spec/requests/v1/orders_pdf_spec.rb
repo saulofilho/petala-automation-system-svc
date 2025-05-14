@@ -1,34 +1,88 @@
-# spec/requests/v1/orders_pdf_spec.rb
-require 'rails_helper'
+# frozen_string_literal: true
 
-# RSpec.describe "GET /v1/orders/:id/pdf", type: :request do
-#   let(:user)    { create(:user) }
-#   let(:order)   { create(:order) }
-#   let(:token)   { JwtService.encode(user_id: user.id) }
-#   let(:cookies) { { session_token: token } }
+require 'swagger_helper'
 
-#   before do
-#     allow_any_instance_of(ApplicationController)
-#       .to receive(:authenticate_request!)
-#       .and_return(true)
-#     allow_any_instance_of(ApplicationController)
-#       .to receive(:current_user)
-#       .and_return(user)
-#   end
+RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
+    path '/v1/orders/{id}/pdf' do
+      get 'download pdf' do
+        tags 'Orders'
+        consumes 'application/json'
+        produces 'application/json'
+        operationId 'order_show'
+        parameter name: :id, in: :path, type: :string
+        security [cookie_auth: [], bearer_auth: []]
 
-#   it "retorna status 200 e um PDF válido" do
-#     get "/v1/orders/#{order.id}/pdf", headers: { "Cookie" => cookie_header(cookies) }
+        context 'when user is logged in' do
+          context 'as admin' do
+            let(:user) { create(:user, role: 'admin') }
+            include_context 'with user authentication' do
+              let(:user_id) { user.id }
+            end
 
-#     expect(response).to have_http_status(:ok)
-#     expect(response.content_type).to eq "application/pdf"
-#     expect(response.body.byteslice(0, 4)).to eq "%PDF"
-#     expect(response.headers["Content-Disposition"])
-#       .to match /inline; filename="order_#{order.id}\.pdf"/
-#   end
+            response 200, 'pdf was generated' do
+              let(:company) { create(:company, user:) }
+              let(:order) { create(:order, company:) }
+              let(:id) { order.id }
+              run_test! do
+                expect(response).to have_http_status(:ok)
+                expect(response.content_type).to eq "application/pdf"
+                expect(response.body.byteslice(0, 4)).to eq "%PDF"
+                expect(response.headers["Content-Disposition"])
+                  .to match /inline; filename="order_#{order.id}\.pdf"/
+              end
+            end
 
-#   private
+            response 404, 'order not founded' do
+              let(:id) { 999 }
+              schema '$ref' => '#/components/schemas/error_response'
+              run_test!
+            end
+          end
 
-#   def cookie_header(hash)
-#     hash.map { |k, v| "#{k}=#{v}" }.join("; ")
-#   end
-# end
+          context 'as manager' do
+            let(:user) { create(:user, role: 'manager') }
+            include_context 'with user authentication' do
+              let(:user_id) { user.id }
+            end
+
+            response 200, 'pdf was generated' do
+              let(:company) { create(:company, user:) }
+              let(:order) { create(:order, company:) }
+              let(:id) { order.id }
+              run_test! do
+                expect(response).to have_http_status(:ok)
+                expect(response.content_type).to eq "application/pdf"
+                expect(response.body.byteslice(0, 4)).to eq "%PDF"
+                expect(response.headers["Content-Disposition"])
+                  .to match /inline; filename="order_#{order.id}\.pdf"/
+              end
+            end
+
+            response 404, 'order not founded' do
+              let(:id) { 999 }
+              schema '$ref' => '#/components/schemas/error_response'
+              run_test!
+            end
+
+            response 403, 'user not owner' do
+              let(:other_user) { create(:user) }
+              let(:company) { create(:company, user: other_user) }
+              let(:order) { create(:order, company: company) }
+              let(:id) { order.id }
+              schema '$ref' => '#/components/schemas/error_response'
+              run_test!
+            end
+          end
+        end
+
+        context 'when user is not logged in' do
+          let(:id) { 999 }
+          include_context 'with missing jwt authentication'
+          response 401, 'invalid session' do
+            schema '$ref' => '#/components/schemas/error_response'
+            run_test!
+          end
+        end
+      end
+  end
+end

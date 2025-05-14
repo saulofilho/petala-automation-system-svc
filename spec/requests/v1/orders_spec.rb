@@ -10,6 +10,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'order_show'
       parameter name: :id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         context 'as admin' do
@@ -85,6 +86,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
       operationId 'order_update'
       parameter name: :id, in: :path, type: :string
       parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/order_update' }
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         context 'as admin' do
@@ -201,6 +203,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'order_destroy'
       parameter name: :id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         context 'as admin' do
@@ -271,6 +274,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'order_index'
       parameter name: :company_id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         context 'as admin' do
@@ -328,6 +332,7 @@ RSpec.describe 'V1::Orders', swagger_doc: 'v1/swagger.yaml' do
       operationId 'order_create'
       parameter name: :company_id, in: :path, type: :string
       parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/order' }
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         let(:user) { create(:user) }

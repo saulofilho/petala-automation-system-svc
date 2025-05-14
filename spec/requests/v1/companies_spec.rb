@@ -10,6 +10,7 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'company_show'
       parameter name: :id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'When user is logged in' do
         context 'as admin' do
@@ -84,6 +85,7 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       operationId 'company_update'
       parameter name: :id, in: :path, type: :string
       parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/company_update' }
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'When user is logged in' do
         context 'as admin' do
@@ -211,6 +213,7 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'company_destroy'
       parameter name: :id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'When user is logged in' do
         context 'as admin' do
@@ -278,6 +281,7 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       produces 'application/json'
       operationId 'company_index'
       parameter name: :user_id, in: :path, type: :string
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'when user is logged in' do
         context 'as admin' do
@@ -329,6 +333,7 @@ RSpec.describe 'V1::Companies', swagger_doc: 'v1/swagger.yaml' do
       operationId 'company_create'
       parameter name: :user_id, in: :path, type: :string
       parameter name: :payload, in: :body, schema: { '$ref' => '#/components/schemas/company' }
+      security [cookie_auth: [], bearer_auth: []]
 
       context 'When user is logged in' do
         let(:user) { create(:user) }
