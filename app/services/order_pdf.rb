@@ -31,14 +31,16 @@ class OrderPdf < Prawn::Document
   end
 
   def item_rows
-    [['#', 'Produto', 'Quantidade', 'Code', 'Preço Unitário']] +
+    [['#', 'Produto', 'Code', 'Preço Unitário', 'Quantidade', 'EAN Code', 'Ordem ID']] +
       @order.order_items.map.with_index(1) do |item, i|
         [
           i,
           item.product,
-          item.quantity,
           item.code,
           format_currency(item.price),
+          item.quantity,
+          ean_code.quantity,
+          order_id.quantity
         ]
       end
   end
