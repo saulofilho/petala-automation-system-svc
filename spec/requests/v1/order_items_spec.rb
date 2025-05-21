@@ -302,7 +302,7 @@ RSpec.describe 'V1::OrderItems', swagger_doc: 'v1/swagger.yaml' do
             let!(:user_order_items) { create_list(:order_item, 3, order: user_order) }
             schema schema_with_objects(:order_items, '#/components/schemas/order_item')
             run_test! do
-              expect(json_response[:order_items].size).to eq 6
+              expect(json_response[:order_items].size).to eq 3
             end
           end
         end

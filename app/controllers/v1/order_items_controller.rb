@@ -4,11 +4,11 @@
 module V1
   class OrderItemsController < ApplicationController
     before_action :authenticate_request!
-    before_action :set_order, only: %i[import]
+    before_action :set_order, only: %i[index import]
     before_action :set_order_item, only: %i[show update destroy]
 
     def index
-      @order_items = policy_scope(OrderItem)
+      @order_items = policy_scope(@order.order_items)
       render json: Panko::Response.new(order_items: Panko::ArraySerializer.new(@order_items, each_serializer: OrderItemSerializer)),
              status: :ok
     end
