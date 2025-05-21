@@ -22,13 +22,13 @@ RSpec.describe OrderPdf, type: :prawn do
     end
 
     it 'outputs the header with order number and draws a rule' do
-      expect(pdf).to have_received(:text).with("Pedido #42", size: 24, style: :bold, align: :center)
+      expect(pdf).to have_received(:text).with('Pedido #42', size: 24, style: :bold, align: :center)
       expect(pdf).to have_received(:stroke_horizontal_rule)
     end
 
     it 'outputs order details' do
-      expect(pdf).to have_received(:text).with("Cliente: ACME Ltda")
-      expect(pdf).to have_received(:text).with("Data do Pedido: 20/05/2025 14:35")
+      expect(pdf).to have_received(:text).with('Cliente: ACME Ltda')
+      expect(pdf).to have_received(:text).with('Data do Pedido: 20/05/2025 14:35')
     end
   end
 

@@ -7,9 +7,9 @@ RSpec.describe ImportOrderItemsService, type: :service do
   let(:sheet) { double('sheet', last_row: last_row) }
   let(:last_row) { 3 }
 
-  let(:header_row) { ['Código', 'Produto', 'Preço', 'Qtd', 'Total', 'EAN'] }
+  let(:header_row) { %w[Código Produto Preço Qtd Total EAN] }
   let(:valid_row)  { ['123', 'Product A', '10.5', '2', '21.0', '456'] }
-  let(:blank_row)  { ['',    '',         '',    '',   '',     ''] }
+  let(:blank_row)  { ['',    '', '', '', '', ''] }
 
   before do
     allow(sheet).to receive(:row).with(1).and_return(header_row)
@@ -35,7 +35,7 @@ RSpec.describe ImportOrderItemsService, type: :service do
       end
 
       it 'does not import the invalid row and collects errors' do
-        expect { result }.not_to change { order.order_items.count }
+        expect { result }.not_to(change { order.order_items.count })
         expect(result[:imported]).to eq(0)
         expect(result[:errors]).to eq([{ row: 2, messages: ['Invalid data'] }])
       end
