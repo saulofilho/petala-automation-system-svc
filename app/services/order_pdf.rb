@@ -41,8 +41,8 @@ class OrderPdf < Prawn::Document
           item.code,
           format_currency(item.price),
           item.quantity,
-          ean_code.quantity,
-          order_id.quantity
+          item.ean_code,
+          item.order_id
         ]
       end
   end
