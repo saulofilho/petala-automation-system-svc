@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'prawn'
-require 'prawn/table'  # agora existe no load path
+require 'prawn/table' # agora existe no load path
 
 class OrderPdf < Prawn::Document
   def initialize(order)
@@ -48,6 +50,6 @@ class OrderPdf < Prawn::Document
   private
 
   def format_currency(number)
-    "%.2f" % number
+    '%.2f' % number
   end
 end

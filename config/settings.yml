@@ -136,11 +136,12 @@ api:
         product:
           type: 'string'
         price:
-          type: 'number'
-          format: 'float'
+          type: 'string'
         quantity:
           type: 'integer'
         ean_code:
+          type: 'string'
+        total:
           type: 'string'
         order_id:
           type: 'integer'
@@ -152,8 +153,7 @@ api:
         product:
           type: 'string'
         price:
-          type: 'number'
-          format: 'float'
+          type: 'string'
         quantity:
           type: 'integer'
         ean_code:

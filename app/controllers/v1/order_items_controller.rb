@@ -4,6 +4,7 @@
 module V1
   class OrderItemsController < ApplicationController
     before_action :authenticate_request!
+    before_action :set_order, only: %i[import]
     before_action :set_order_item, only: %i[show update destroy]
 
     def index
@@ -34,7 +35,23 @@ module V1
       head :no_content
     end
 
+    def import
+      file = params.require(:file)
+      spreadsheet = Roo::Spreadsheet.open(file.path, extension: File.extname(file.original_filename).delete('.'))
+      result = ImportOrderItemsService.new(@order, spreadsheet).call
+
+      if result[:errors].empty?
+        render json: { imported: result[:imported] }, status: :created
+      else
+        render json: { imported: result[:imported], errors: result[:errors] }, status: :unprocessable_entity
+      end
+    end
+
     private
+
+    def set_order
+      @order = Order.find(params[:order_id])
+    end
 
     def set_order_item
       @order_item = OrderItem.find(params[:id])
@@ -42,13 +59,13 @@ module V1
 
     def order_item_create_params
       params.require(:order_item).permit(
-        :code, :product, :price, :quantity, :ean_code, :order_id
+        :code, :product, :price, :quantity, :ean_code, :total, :order_id
       )
     end
 
     def order_item_update_params
       params.require(:order_item).permit(
-        :code, :product, :price, :quantity, :ean_code
+        :code, :product, :price, :quantity, :ean_code, :total
       )
     end
   end

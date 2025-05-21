@@ -8,7 +8,8 @@ module V1
     def index
       users = User.all
       authorize current_user
-      render json: Panko::Response.new(users: Panko::ArraySerializer.new(users, each_serializer: UserSerializer)), status: :ok
+      render json: Panko::Response.new(users: Panko::ArraySerializer.new(users, each_serializer: UserSerializer)),
+             status: :ok
     end
 
     def show

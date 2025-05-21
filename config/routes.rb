@@ -20,7 +20,11 @@ Rails.application.routes.draw do
           member do
             get :pdf
           end
-          resources :order_items, shallow: true
+          resources :order_items, shallow: true do
+            collection do
+              post :import
+            end
+          end
         end
       end
     end

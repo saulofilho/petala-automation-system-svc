@@ -37,9 +37,9 @@ module V1
       authorize @order
       pdf = OrderPdf.new(@order)
       send_data pdf.render,
-                filename:     "order_#{@order.id}.pdf",
-                type:         'application/pdf',
-                disposition:  'inline'
+                filename: "order_#{@order.id}.pdf",
+                type: 'application/pdf',
+                disposition: 'inline'
     end
 
     private

@@ -17,7 +17,8 @@ module V1
     end
 
     def create
-      company = Company.create!(company_create_params)
+      user = User.find(params[:user_id])
+      company = user.companies.create!(company_create_params)
       render json: { company: CompanySerializer.new.serialize(company) }, status: :created
     end
 
@@ -40,7 +41,7 @@ module V1
     end
 
     def company_create_params
-      params.require(:company).permit(:name, :cnpj, :cep, :street, :number, :city, :state, :user_id)
+      params.require(:company).permit(:name, :cnpj, :cep, :street, :number, :city, :state)
     end
 
     def company_update_params

@@ -7,6 +7,7 @@ FactoryBot.define do
     price { Faker::Commerce.price(range: 10.0..100.0) }
     quantity { rand(1..10) }
     ean_code { Faker::Code.ean }
+    total { price * quantity }
     order
   end
 end

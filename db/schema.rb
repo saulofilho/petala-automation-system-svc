@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_250_430_180_544) do
+ActiveRecord::Schema[8.0].define(version: 20_250_521_183_318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
 
@@ -32,14 +32,15 @@ ActiveRecord::Schema[8.0].define(version: 20_250_430_180_544) do
   end
 
   create_table 'order_items', force: :cascade do |t|
-    t.string 'code'
-    t.string 'product'
-    t.float 'price'
-    t.integer 'quantity'
-    t.string 'ean_code'
+    t.string 'code', default: '0', null: false
+    t.string 'product', default: 'Produto', null: false
+    t.string 'price', default: '0', null: false
+    t.integer 'quantity', default: 0, null: false
+    t.string 'ean_code', default: '0', null: false
     t.bigint 'order_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.string 'total', default: '0', null: false
     t.index ['order_id'], name: 'index_order_items_on_order_id'
   end
 
