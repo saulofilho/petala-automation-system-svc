@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    admin?
+    owner? || admin?
   end
 
   def create?
@@ -19,5 +19,15 @@ class UserPolicy < ApplicationPolicy
 
   def destroy?
     admin?
+  end
+
+  def me?
+    true
+  end
+
+  private
+
+  def owner?
+    @user.id == @record.id
   end
 end

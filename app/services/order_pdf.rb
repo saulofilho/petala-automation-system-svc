@@ -14,14 +14,14 @@ class OrderPdf < Prawn::Document
   end
 
   def header
-    text "Pedido ##{@order.id}", size: 24, style: :bold, align: :center
+    text "Orçamento ##{@order.id}", size: 24, style: :bold, align: :center
     stroke_horizontal_rule
   end
 
   def order_details
     move_down 10
     text "Cliente: #{@order.company.name}"
-    text "Data do Pedido: #{@order.created_at.strftime('%d/%m/%Y %H:%M')}"
+    text "Data do Orçamento: #{@order.created_at.strftime('%d/%m/%Y %H:%M')}"
   end
 
   def order_items_table

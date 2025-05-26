@@ -7,20 +7,14 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :name, :cpf, :phone, presence: true
   validates :role, presence: true, inclusion: { in: %w[admin manager promoter] }
-  validates :password, length: { minimum: 8 }
-  validate :password_complexity
+  validates :password, length: { minimum: 8 }, if: -> { password.present? }
+  validate :password_complexity, if: -> { password.present? }
 
   enum :role, {
     admin: 'admin',
     manager: 'manager',
     promoter: 'promoter'
   }, prefix: :role
-
-  def generate_validation_token
-    self.verification_token_sent_at = Time.zone.now
-    self.verification_token = SecureRandom.hex(4)
-    save(validate: false)
-  end
 
   private
 

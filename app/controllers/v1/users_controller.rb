@@ -19,18 +19,7 @@ module V1
 
     def create
       command = UserCommand::Create.call(user_create_params)
-      response.set_cookie(
-        :session_token,
-        value: command.result[:session_token],
-        path: '/',
-        httponly: true,
-        expires: 24.hours.from_now
-      )
       render json: { user: UserSerializer.new.serialize(command.result[:user]) }, status: :created
-    end
-
-    def me
-      render json: { user: UserSerializer.new.serialize(@current_user) }, status: :ok
     end
 
     def update
@@ -44,6 +33,10 @@ module V1
     def destroy
       @user.destroy
       head :no_content
+    end
+
+    def me
+      render json: { user: UserSerializer.new.serialize(@current_user) }, status: :ok
     end
 
     def change_password

@@ -9,10 +9,7 @@ module UserCommand
     end
 
     def call
-      user = User.create! @params
-      session_token = JsonWebToken.encode(user: { id: user.id })
-      user.generate_validation_token
-      { session_token:, user: }
+      User.create! @params
     end
   end
 end
